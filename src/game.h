@@ -11,10 +11,10 @@ class game
 	gameState state;
 public:
 	game();
-	int twoFour();
-	void populateRandomSlot();
-	void printBoard(bool);
-	void checkState();
+	int twoFour(); // return 2 or 4 randomly
+	void populateRandomSlot(); // populates a random empty slot on board
+	void printBoard(bool); // prints board and checks which slots are empty of argument is 1
+	void checkState(); //checks if game is over or not
 	bool mergeUp(bool);
 	bool mergeDown(bool);
 	bool mergeLeft(bool);

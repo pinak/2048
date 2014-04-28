@@ -8,21 +8,17 @@ using namespace std;
 game::game()
 {
 	state = running;
-	srand(time(NULL)); // initalize srand using current time as seed
+	srand(time(NULL)); // seed the random function
 	for(int i = 0; i < 4; i++) 
 	{
 		for(int j = 0; j < 4; j++)
 		{
 			board[i][j] = 0; //set board to empty
-			emptySlots.push_back(10*i + j); //set all slots to empty
+			emptySlots.push_back(10*i + j); //adds all slot to empty slot holding vector
 		}
 	}
-	for(int i = 0; i < 2; i++)
-	{
 		populateRandomSlot();
-	}
-	//board[2][0] = 2;
-	//board[3][0] = 2;
+		populateRandomSlot();
 }
 
 int game::twoFour()
@@ -159,7 +155,7 @@ bool game::mergeUp(bool dryrun)
 			}
 		}
 		if(possible)
-		break;	
+			break;	
 	}
 	if(dryrun || possible == 0)
 	{
