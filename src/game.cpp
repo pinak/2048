@@ -73,7 +73,7 @@ void game::checkState()
 		return;
 	else
 	{
-		if(mergeUp(1) == 0 && mergeLeft(1) == 0)
+		if(mergeUpDown(1, 1) == 0 && mergeLeftRight(1, 1) == 0)
 		{
 			state = over;
 			return;
@@ -96,25 +96,25 @@ void game::play()
 		{
 			case 'w':
 			move = moveUp();
-			merge = mergeUp(0);
+			merge = mergeUpDown(0, 1);
 			moveUp();
 			break;
 
 			case 's':
 			move = moveDown();
-			merge = mergeDown(0);
+			merge = mergeUpDown(0, 0);
 			moveDown();
 			break;
 
 			case 'a':
 			move = moveLeft();
-			merge = mergeLeft(0);
+			merge = mergeLeftRight(0, 1);
 			moveLeft();
 			break;
 
 			case 'd':
 			move = moveRight();
-			merge = mergeRight(0);
+			merge = mergeLeftRight(0, 0);
 			moveRight();
 			break;
 		}
@@ -138,11 +138,11 @@ void game::play()
 }
 
 
-bool game::mergeUp(bool dryrun)
+bool game::mergeUpDown(bool dryrun, bool up)
 {
 	bool possible = 0;
 	int i;
-	for(i = 0; i < 3; i++)  //check if merge possible
+	for(i = 0; i < 3; i++)
 	{
 		for(int j = 0; j < 4; j++)
 		{
@@ -151,34 +151,24 @@ bool game::mergeUp(bool dryrun)
 			if(board[i][j] == board[i + 1][j])
 			{
 				possible = 1;
-				break;
-			}
-		}
-		if(possible)
-			break;	
-	}
-	if(dryrun || possible == 0)
-	{
-		return possible;
-	}
-	else
-	{
-		for(i; i < 3; i++)
-		{
-			for(int j = 0; j < 4; j++)
-			{
-				if(board[i][j] == 0)
-					continue;
-
-				else if(board[i][j] == board[i + 1][j])
-				{
-					board[i][j] *= 2;
-					board[i + 1][j] = 0 ;
+				if(dryrun)
+					return possible;
+				else
+				{	if(up)
+					{
+						board[i][j] *= 2;
+						board[i + 1][j] = 0;
+					}
+					else //for down
+					{
+						board[i][j] = 0;
+						board[i + 1][j] *= 2;
+					}
 				}
 			}
-		}
-		return possible;
+		}	
 	}
+	return possible;
 }
 
 bool game::moveUp()
@@ -205,48 +195,6 @@ bool game::moveUp()
 	return possible;
 }
 
-bool game::mergeDown(bool dryrun)
-{
-	bool possible = 0;
-	int i;
-	for(i = 0; i < 3; i++)  //check if merge possible
-	{
-		for(int j = 0; j < 4; j++)
-		{
-			if(board[i][j] == 0)
-				continue;
-			if(board[i][j] == board[i + 1][j])
-			{
-				possible = 1;
-				break;
-			}
-		}
-		if(possible)
-		break;	
-	}
-	if(dryrun || possible == 0)
-	{
-		return possible;
-	}
-	else
-	{
-		for(i; i < 3; i++)
-		{
-			for(int j = 0; j < 4; j++)
-			{
-				if(board[i][j] == 0)
-					continue;
-
-				else if(board[i][j] == board[i + 1][j])
-				{
-					board[i + 1][j] *= 2;
-					board[i][j] = 0 ;
-				}
-			}
-		}
-		return possible;
-	}
-}
 
 bool game::moveDown()
 {
@@ -272,47 +220,38 @@ bool game::moveDown()
 	return possible;
 }
 
-bool game::mergeLeft(bool dryrun)
+bool game::mergeLeftRight(bool dryrun, bool left)
 {
 	bool possible = 0;
 	int j;
-	for(j = 0; j < 3; j++)  //check if merge possible
+	for(j = 0; j < 3; j++)
 	{
 		for(int i = 0; i < 4; i++)
 		{
 			if(board[i][j] == 0)
 				continue;
-			else if(board[i][j] == board[i][j + 1])
+			if(board[i][j] == board[i][j + 1])
 			{
 				possible = 1;
-				break;
-			}
-		}
-		if(possible)
-		break;	
-	}
-	if(dryrun || possible == 0)
-	{
-		return possible;
-	}
-	else
-	{
-		for(j; j < 3; j++)
-		{
-			for(int i = 0; i < 4; i++)
-			{
-				if(board[i][j] == 0)
-					continue;
-
-				else if(board[i][j] == board[i][j + 1])
+				if(dryrun)
+					break;
+				else
 				{
-					board[i][j] *= 2;
-					board[i][j + 1] = 0 ;
+					if(left)
+					{
+						board[i][j] *= 2;
+						board[i][j + 1] = 0;
+					}
+					else //for right
+					{
+						board[i][j] = 0;
+						board[i][j + 1] *= 2;
+					}
 				}
 			}
-		}
-		return possible;
+		}	
 	}
+	return possible;
 }
 
 bool game::moveLeft()
@@ -339,48 +278,6 @@ bool game::moveLeft()
 	return possible;
 }
 
-bool game::mergeRight(bool dryrun)
-{
-	bool possible = 0;
-	int j;
-	for(j = 0; j < 3; j++)  //check if merge possible
-	{
-		for(int i = 0; i < 4; i++)
-		{
-			if(board[i][j] == 0)
-				continue;
-			else if(board[i][j] == board[i][j + 1])
-			{
-				possible = 1;
-				break;
-			}
-		}
-		if(possible)
-		break;	
-	}
-	if(dryrun || possible == 0)
-	{
-		return possible;
-	}
-	else
-	{
-		for(j; j < 3; j++)
-		{
-			for(int i = 0; i < 4; i++)
-			{
-				if(board[i][j] == 0)
-					continue;
-
-				else if(board[i][j] == board[i][j + 1])
-				{
-					board[i][j + 1] *= 2;
-					board[i][j] = 0;
-				}
-			}
-		}
-		return possible;
-	}
-}
 
 bool game::moveRight()
 {

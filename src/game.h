@@ -15,10 +15,8 @@ public:
 	void populateRandomSlot(); // populates a random empty slot on board
 	void printBoard(bool); // prints board and checks which slots are empty of argument is 1
 	void checkState(); //checks if game is over or not
-	bool mergeUp(bool);
-	bool mergeDown(bool);
-	bool mergeLeft(bool);
-	bool mergeRight(bool);
+	bool mergeUpDown(bool dryrun, bool up); //merges up if up == 1 else down 
+	bool mergeLeftRight(bool dryrun, bool left);//merges left if left else right 
 	bool moveUp();
 	bool moveDown();
 	bool moveLeft();
