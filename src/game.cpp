@@ -14,11 +14,12 @@ game::game()
 		for(int j = 0; j < 4; j++)
 		{
 			board[i][j] = 0; //set board to empty
-			emptySlots.push_back(10*i + j); //adds all slot to empty slot holding vector
+			emptySlots.push_back(10*i + j); //adds all slot to list of empty slots
 		}
 	}
-		populateRandomSlot();
-		populateRandomSlot();
+	score = 0;
+	populateRandomSlot();
+	populateRandomSlot();
 }
 
 int game::twoFour()
@@ -44,10 +45,11 @@ void game::populateRandomSlot()
 	}
 }
 
-void game::printBoard(bool update) //prints board and updates empty slot vector if update == 1
+void game::printBoard(bool update)
 {
 	if(update)
 		emptySlots.clear();
+	cout << "score: " << score << endl;
 	for(int i = 0; i < 4; i++)
 	{
 		for(int j = 0; j < 4; j++)
@@ -158,11 +160,13 @@ bool game::mergeUpDown(bool dryrun, bool up)
 					{
 						board[i][j] *= 2;
 						board[i + 1][j] = 0;
+						score += board[i][j];
 					}
 					else //for down
 					{
 						board[i][j] = 0;
 						board[i + 1][j] *= 2;
+						score += board[i + 1][j];
 					}
 				}
 			}
@@ -241,11 +245,13 @@ bool game::mergeLeftRight(bool dryrun, bool left)
 					{
 						board[i][j] *= 2;
 						board[i][j + 1] = 0;
+						score += board[i][j];
 					}
 					else //for right
 					{
 						board[i][j] = 0;
 						board[i][j + 1] *= 2;
+						score += board[i][j + 1];
 					}
 				}
 			}
