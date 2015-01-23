@@ -7,12 +7,13 @@ The game is console only for now. I do have plans to implement a GUI using Qt to
 
 Build Instructions:
 ====================
-$ git clone https://github.com/pinak/2048
-$ mkdir build
-$ cd build
-$ cmake ../2048
-$ make
-
+```bash
+git clone https://github.com/pinak/2048
+mkdir build
+cd build
+cmake ../2048
+make
+```
 Then run the game binary in src/
 
 Playing Instructions:
