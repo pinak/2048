@@ -2,6 +2,6 @@
 
 int main()
 {
-	game g;
-	g.play();
+    game g;
+    g.play();
 }
