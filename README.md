@@ -18,6 +18,6 @@ Then run build/src/Game
 
 Playing Instructions:
 ======================
-Use w,a,s,d followed by enter key to perform a move.
+Use use arrow keys to move around
 
 
