@@ -2,7 +2,7 @@
 ====
 
 My implementation of the game 2048 (which is a clone of three's) in C++.
-The game is console only for now. I do have plans to implement a GUI using Qt to get familiar with it.
+The game has a GUI now implemented using Qt Quick, though it needs a bit of polishing.
 
 
 Build Instructions:
@@ -14,7 +14,7 @@ cd build
 cmake ../2048
 make
 ```
-Then run the game binary in src/
+Then run build/src/Game
 
 Playing Instructions:
 ======================
