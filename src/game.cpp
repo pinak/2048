@@ -3,13 +3,14 @@
 #include <iomanip>
 #include <cstdlib>
 #include <algorithm>
+
 using namespace std;
 
-game::game()
+Game::Game(QObject* parent)
+    : QObject(parent)
 {
-    state = running;
     srand(time(NULL)); // seed the random function
-    for(int i = 0; i < 4; i++) 
+    for(int i = 0; i < 4; i++)
     {
         for(int j = 0; j < 4; j++)
         {
@@ -22,7 +23,7 @@ game::game()
     populateRandomSlot();
 }
 
-int game::twoFour()
+int Game::twoFour()
 {
     int a = rand() % 2;
     if(a == 0)
@@ -30,7 +31,7 @@ int game::twoFour()
     return 4;
 }
 
-void game::populateRandomSlot()
+void Game::populateRandomSlot()
 {
     int size = emptySlots.size();
     if(size == 0)
@@ -45,7 +46,7 @@ void game::populateRandomSlot()
     }
 }
 
-void game::printBoard(bool update)
+void Game::printBoard(bool update)
 {
     if(update)
         emptySlots.clear();
@@ -69,78 +70,72 @@ void game::printBoard(bool update)
     }
 }
 
-void game::checkState()
+bool Game::gameOver()
 {
     if(emptySlots.size() > 0)
-        return;
+        return false;
     else
     {
         if(mergeUpDown(1, 1) == 0 && mergeLeftRight(1, 1) == 0)
         {
-            state = over;
-            return;
+            return true;
         }
     }
-    return;
+    return false;
 }
 
 
 
-void game::play()
-{   
+void Game::play(int direction)
+{
     printBoard(0);
-    char direction;
-    bool move, merge;
-    while(state == running)
+    bool move = 0, merge = 0;
+    switch(direction)
     {
-        cin >> direction;
-        switch(direction)
-        {
-            case 'w':
-            move = moveUp();
-            merge = mergeUpDown(0, 1);
-            moveUp();
-            break;
+        case up:
+        move = moveUp();
+        merge = mergeUpDown(0, 1);
+        moveUp();
+        break;
 
-            case 's':
-            move = moveDown();
-            merge = mergeUpDown(0, 0);
-            moveDown();
-            break;
+        case down:
+        move = moveDown();
+        merge = mergeUpDown(0, 0);
+        moveDown();
+        break;
 
-            case 'a':
-            move = moveLeft();
-            merge = mergeLeftRight(0, 1);
-            moveLeft();
-            break;
+        case left:
+        move = moveLeft();
+        merge = mergeLeftRight(0, 1);
+        moveLeft();
+        break;
 
-            case 'd':
-            move = moveRight();
-            merge = mergeLeftRight(0, 0);
-            moveRight();
-            break;
-        }
-        //cout << "\nmove: " << move << endl << "merge: " << merge << endl; 
-        if(move || merge)
-        {
-            system("clear");
-            printBoard(1);
-            populateRandomSlot();
-            checkState();
-            system("clear");
-            cout << endl;
-            printBoard(0);
-            move = 0;
-            merge = 0;
-
-        }
-        else
-            cout << "invalid move\n";
+        case right:
+        move = moveRight();
+        merge = mergeLeftRight(0, 0);
+        moveRight();
+        break;
     }
+    //cout << "\nmove: " << move << endl << "merge: " << merge << endl;
+    if(move || merge)
+    {
+        emit boardChanged();
+        system("clear");
+        printBoard(1);
+        populateRandomSlot();
+        if (gameOver()) {
+            emit gameOver();
+        }
+        system("clear");
+        cout << endl;
+        printBoard(0);
+    }
+    else
+        cout << "invalid move\n";
 }
 
 
-bool game::mergeUpDown(bool dryrun, bool up)
+bool Game::mergeUpDown(bool dryrun, bool up)
 {
     bool possible = 0;
     int i;
@@ -170,12 +165,12 @@ bool game::mergeUpDown(bool dryrun, bool up)
                     }
                 }
             }
-        }   
+        }
     }
     return possible;
 }
 
-bool game::moveUp()
+bool Game::moveUp()
 {
     bool possible = 0;
     int curRow;
@@ -192,15 +187,15 @@ bool game::moveUp()
                 board[curRow][j] = 0;
                 possible = 1;
                 curRow--;
-            }   
-            
+            }
+
         }
     }
     return possible;
 }
 
 
-bool game::moveDown()
+bool Game::moveDown()
 {
     bool possible = 0;
     int curRow;
@@ -217,14 +212,14 @@ bool game::moveDown()
                 board[curRow][j] = 0;
                 possible = 1;
                 curRow++;
-            }   
-            
+            }
+
         }
     }
     return possible;
 }
 
-bool game::mergeLeftRight(bool dryrun, bool left)
+bool Game::mergeLeftRight(bool dryrun, bool left)
 {
     bool possible = 0;
     int j;
@@ -255,12 +250,12 @@ bool game::mergeLeftRight(bool dryrun, bool left)
                     }
                 }
             }
-        }   
+        }
     }
     return possible;
 }
 
-bool game::moveLeft()
+bool Game::moveLeft()
 {
     bool possible = 0;
     int curCol;
@@ -277,15 +272,15 @@ bool game::moveLeft()
                 board[i][curCol] = 0;
                 curCol--;
                 possible = 1;
-            }   
-                
+            }
+
         }
     }
     return possible;
 }
 
 
-bool game::moveRight()
+bool Game::moveRight()
 {
     bool possible = 0;
     int curCol;
@@ -302,9 +297,14 @@ bool game::moveRight()
                 board[i][curCol] = 0;
                 curCol++;
                 possible = 1;
-            }   
-                
+            }
+
         }
     }
     return possible;
+}
+
+int Game::get(int i, int j) const
+{
+    return board[i][j];
 }
