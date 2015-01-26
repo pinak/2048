@@ -33,22 +33,22 @@ void GameModel::ondataChanged()
 
 void GameModel::moveUp()
 {
-    m_game.play(0);
+    m_game.play(Game::up);
 }
 
 void GameModel::moveDown()
 {
-    m_game.play(1);
+    m_game.play(Game::down);
 }
 
 void GameModel::moveLeft()
 {
-    m_game.play(2);
+    m_game.play(Game::left);
 }
 
 void GameModel::moveRight()
 {
-    m_game.play(3);
+    m_game.play(Game::right);
 }
 
 
