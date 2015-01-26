@@ -119,10 +119,10 @@ void Game::play(int direction)
     //cout << "\nmove: " << move << endl << "merge: " << merge << endl;
     if(move || merge)
     {
-        emit boardChanged();
         system("clear");
         printBoard(1);
         populateRandomSlot();
+        emit boardChanged();
         if (gameOver()) {
             emit gameOver();
         }
