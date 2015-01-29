@@ -20,4 +20,9 @@ Playing Instructions:
 ======================
 Use use arrow keys to move around
 
+Screenshot:
+===========
+
+![Alt text](/screenshot.png?raw=true "Screenshot")
+
 
