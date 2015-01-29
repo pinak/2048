@@ -31,12 +31,14 @@ Window {
         Rectangle {
             id: gameBoard
             anchors.fill: parent
-            color: "steelblue"
+            color: "grey"
 
             Grid {
-                anchors.fill: parent
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
                 rows: 4
                 columns: 4
+                spacing: 4
 
                 Repeater {
                     id: boardRepeater

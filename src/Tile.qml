@@ -6,19 +6,29 @@ Rectangle {
     property int tileWidth: 70
 
     function handleZero(value) {
-        if (parseInt(value, 10) ===0) {
+        if (parseInt(value, 10) === 0) {
             return "";
         }
         return value;
     }
 
-    color: "orange"
+    function setColor(value) {
+        if (parseInt(value, 10) === 0) {
+            return "lightblue"
+        }
+        else
+            return "steelblue"
+    }
+
+    color: setColor(value)
     width: 80
     height: 80
+    radius: 10
 
     Text {
         text: handleZero(value)
+        anchors.centerIn: parent
         font.pointSize: 20
-        color: "black"
+        color: "yellow"
     }
 }
