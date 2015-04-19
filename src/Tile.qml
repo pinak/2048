@@ -13,11 +13,15 @@ Rectangle {
     }
 
     function setColor(value) {
-        if (parseInt(value, 10) === 0) {
-            return "lightblue"
+        // This selects a color for for tile according to its value
+        value = parseInt(value, 10);
+        if (value === 0) {
+            return "lightblue";
         }
-        else
-            return "steelblue"
+        else {
+            var colorAr = ["steelblue", "green", "orange", "brown", "red", "pink", "voilet", "indigo", "maroon", "magenta"];
+            return colorAr[(Math.log(value)/Math.log(2) - 1) % colorAr.length];
+        }
     }
 
     color: setColor(value)
