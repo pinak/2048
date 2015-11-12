@@ -14,11 +14,11 @@ Game::Game(QObject* parent)
     {
         for(int j = 0; j < 4; j++)
         {
-            board[i][j] = 0; //set board to empty
-            emptySlots.push_back(10*i + j); //adds all slot to list of empty slots
+            m_board[i][j] = 0; //set board to empty
+            m_emptySlots.push_back(10*i + j); //adds all slot to list of empty slots
         }
     }
-    score = 0;
+    m_score = 0;
     populateRandomSlot();
     populateRandomSlot();
 }
@@ -33,37 +33,37 @@ int Game::twoFour()
 
 void Game::populateRandomSlot()
 {
-    int size = emptySlots.size();
+    int size = m_emptySlots.size();
     if(size == 0)
         cout << "error: no empty slots available";
     else
     {
-        random_shuffle(emptySlots.begin(), emptySlots.end());
-        currentSlot[0] = emptySlots.at(size - 1) / 10;
-        currentSlot[1] = emptySlots.at(size - 1) % 10;
-        emptySlots.pop_back();
-        board[currentSlot[0]][currentSlot[1]] = twoFour();
+        random_shuffle(m_emptySlots.begin(), m_emptySlots.end());
+        m_currentSlot[0] = m_emptySlots.at(size - 1) / 10;
+        m_currentSlot[1] = m_emptySlots.at(size - 1) % 10;
+        m_emptySlots.pop_back();
+        m_board[m_currentSlot[0]][m_currentSlot[1]] = twoFour();
     }
 }
 
 void Game::printBoard(bool update)
 {
     if(update)
-        emptySlots.clear();
-    cout << "score: " << score << endl;
+        m_emptySlots.clear();
+    cout << "score: " << m_score << endl;
     for(int i = 0; i < 4; i++)
     {
         for(int j = 0; j < 4; j++)
         {
-            if(!board[i][j])
+            if(!m_board[i][j])
             {
                 cout << setw(4) << " ";
                 if(update)
-                    emptySlots.push_back((10*i) + j);
+                    m_emptySlots.push_back((10*i) + j);
             }
 
             else
-                cout << setw(4) << board[i][j];
+                cout << setw(4) << m_board[i][j];
             cout <<"  ";
         }
         cout << "\n";
@@ -72,7 +72,7 @@ void Game::printBoard(bool update)
 
 bool Game::gameOver()
 {
-    if(emptySlots.size() > 0)
+    if(m_emptySlots.size() > 0)
         return false;
     else
     {
@@ -143,9 +143,9 @@ bool Game::mergeUpDown(bool dryrun, bool up)
     {
         for(int j = 0; j < 4; j++)
         {
-            if(board[i][j] == 0)
+            if(m_board[i][j] == 0)
                 continue;
-            if(board[i][j] == board[i + 1][j])
+            if(m_board[i][j] == m_board[i + 1][j])
             {
                 possible = 1;
                 if(dryrun)
@@ -153,15 +153,15 @@ bool Game::mergeUpDown(bool dryrun, bool up)
                 else
                 {   if(up)
                     {
-                        board[i][j] *= 2;
-                        board[i + 1][j] = 0;
-                        score += board[i][j];
+                        m_board[i][j] *= 2;
+                        m_board[i + 1][j] = 0;
+                        m_score += m_board[i][j];
                     }
                     else //for down
                     {
-                        board[i][j] = 0;
-                        board[i + 1][j] *= 2;
-                        score += board[i + 1][j];
+                        m_board[i][j] = 0;
+                        m_board[i + 1][j] *= 2;
+                        m_score += m_board[i + 1][j];
                     }
                 }
             }
@@ -179,12 +179,12 @@ bool Game::moveUp()
         for(int j = 0; j < 4; j++)
         {
             curRow = i;
-            while(board[curRow - 1][j] == 0)
+            while(m_board[curRow - 1][j] == 0)
             {
-                if(curRow == 0 || board[curRow][j] == 0)
+                if(curRow == 0 || m_board[curRow][j] == 0)
                     break;
-                board[curRow - 1][j] = board[curRow][j];
-                board[curRow][j] = 0;
+                m_board[curRow - 1][j] = m_board[curRow][j];
+                m_board[curRow][j] = 0;
                 possible = 1;
                 curRow--;
             }
@@ -204,12 +204,12 @@ bool Game::moveDown()
         for(int j = 0; j < 4; j++)
         {
             curRow = i;
-            while(board[curRow + 1][j] == 0)
+            while(m_board[curRow + 1][j] == 0)
             {
-                if(curRow == 3 || board[curRow][j] == 0)
+                if(curRow == 3 || m_board[curRow][j] == 0)
                     break;
-                board[curRow + 1][j] = board[curRow][j];
-                board[curRow][j] = 0;
+                m_board[curRow + 1][j] = m_board[curRow][j];
+                m_board[curRow][j] = 0;
                 possible = 1;
                 curRow++;
             }
@@ -227,9 +227,9 @@ bool Game::mergeLeftRight(bool dryrun, bool left)
     {
         for(int i = 0; i < 4; i++)
         {
-            if(board[i][j] == 0)
+            if(m_board[i][j] == 0)
                 continue;
-            if(board[i][j] == board[i][j + 1])
+            if(m_board[i][j] == m_board[i][j + 1])
             {
                 possible = 1;
                 if(dryrun)
@@ -238,15 +238,15 @@ bool Game::mergeLeftRight(bool dryrun, bool left)
                 {
                     if(left)
                     {
-                        board[i][j] *= 2;
-                        board[i][j + 1] = 0;
-                        score += board[i][j];
+                        m_board[i][j] *= 2;
+                        m_board[i][j + 1] = 0;
+                        m_score += m_board[i][j];
                     }
                     else //for right
                     {
-                        board[i][j] = 0;
-                        board[i][j + 1] *= 2;
-                        score += board[i][j + 1];
+                        m_board[i][j] = 0;
+                        m_board[i][j + 1] *= 2;
+                        m_score += m_board[i][j + 1];
                     }
                 }
             }
@@ -264,12 +264,12 @@ bool Game::moveLeft()
         for(int j = 1; j < 4; j++)
         {
             curCol = j;
-            while(board[i][curCol - 1] == 0)
+            while(m_board[i][curCol - 1] == 0)
             {
-                if(curCol == 0 || board[i][curCol] == 0)
+                if(curCol == 0 || m_board[i][curCol] == 0)
                     break;
-                board[i][curCol- 1] = board[i][curCol];
-                board[i][curCol] = 0;
+                m_board[i][curCol- 1] = m_board[i][curCol];
+                m_board[i][curCol] = 0;
                 curCol--;
                 possible = 1;
             }
@@ -289,12 +289,12 @@ bool Game::moveRight()
         for(int j = 2; j >=0; j--)
         {
             curCol = j;
-            while(board[i][curCol + 1] == 0)
+            while(m_board[i][curCol + 1] == 0)
             {
-                if(curCol == 3 || board[i][curCol] == 0)
+                if(curCol == 3 || m_board[i][curCol] == 0)
                     break;
-                board[i][curCol + 1] = board[i][curCol];
-                board[i][curCol] = 0;
+                m_board[i][curCol + 1] = m_board[i][curCol];
+                m_board[i][curCol] = 0;
                 curCol++;
                 possible = 1;
             }
@@ -306,5 +306,5 @@ bool Game::moveRight()
 
 int Game::get(int i, int j) const
 {
-    return board[i][j];
+    return m_board[i][j];
 }

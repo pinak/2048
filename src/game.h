@@ -12,7 +12,7 @@ public:
     Game(QObject* parent = 0);
     void play(int direction);
     int get(int i, int j) const;
-    int currentScore() const { return score; }
+    int currentScore() const { return m_score; }
 
     enum direction {up = 0, down, left, right};
 signals:
@@ -30,8 +30,10 @@ private:
     bool moveLeft();
     bool moveRight();
 
-    int board[boardSize][boardSize], currentSlot[2], score;
-    std::vector<int> emptySlots;
+    int m_board[boardSize][boardSize];
+    int m_currentSlot[2];
+    int m_score;
+    std::vector<int> m_emptySlots;
 };
 
 #endif
