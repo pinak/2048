@@ -29,6 +29,7 @@ QVariant GameModel::data(const QModelIndex& index, int role) const
 void GameModel::ondataChanged()
 {
     emit dataChanged(createIndex(0,0), createIndex( (rowCount() - 1), 0));
+    emit scoreChanged();
 }
 
 void GameModel::moveUp()

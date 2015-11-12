@@ -12,6 +12,7 @@ public:
     Game(QObject* parent = 0);
     void play(int direction);
     int get(int i, int j) const;
+    int currentScore() const { return score; }
 
     enum direction {up = 0, down, left, right};
 signals:

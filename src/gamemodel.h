@@ -7,6 +7,8 @@
 class GameModel : public QAbstractListModel
 {
     Q_OBJECT
+
+    Q_PROPERTY(int score READ currentScore NOTIFY scoreChanged)
 public:
     GameModel(QObject* parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -15,6 +17,10 @@ public:
     Q_INVOKABLE void moveDown();
     Q_INVOKABLE void moveLeft();
     Q_INVOKABLE void moveRight();
+
+    int currentScore() const { return m_game.currentScore(); }
+signals:
+    void scoreChanged();
 
 public slots:
     void ondataChanged();

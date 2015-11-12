@@ -1,5 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Window 2.0
+import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.1
 
 Window {
     id: main
@@ -8,8 +10,10 @@ Window {
     width: 360
 
     Rectangle {
-        color: "yellow"
+        id: gameBoard
+        color: "grey"
         anchors.fill: parent
+
         focus: true
         Keys.onPressed: {
             switch (event.key) {
@@ -28,17 +32,22 @@ Window {
             }
         }
 
-        Rectangle {
-            id: gameBoard
+        ColumnLayout {
+            spacing: 5
             anchors.fill: parent
-            color: "grey"
+
+            Label {
+                text: "Score: " + game.score
+                color: "darkgrey"
+                font.pixelSize: 22
+            }
 
             Grid {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
                 rows: 4
                 columns: 4
                 spacing: 4
+
+                Layout.alignment: Qt.AlignHCenter
 
                 Repeater {
                     id: boardRepeater
@@ -49,6 +58,7 @@ Window {
                     }
                 }
             }
+
         }
     }
 }
